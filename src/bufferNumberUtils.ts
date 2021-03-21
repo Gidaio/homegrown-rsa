@@ -1,4 +1,4 @@
-export function bufferToNumber(buffer: Buffer): bigint {
+export function bufferToBigInt(buffer: Buffer): bigint {
 	let num = 0n
 	for (const byte of buffer) {
 		num <<= 8n
@@ -8,7 +8,7 @@ export function bufferToNumber(buffer: Buffer): bigint {
 	return num
 }
 
-export function numberToBuffer(num: bigint, bufferLength: number): Buffer {
+export function bigIntToBuffer(num: bigint, bufferLength: number): Buffer {
 	const buffer = Buffer.alloc(bufferLength)
 	for (let i = buffer.length - 1; i >= 0; i--) {
 		buffer.writeUInt8(Number(num & 0xffn), i)
