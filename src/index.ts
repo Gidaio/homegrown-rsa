@@ -1,9 +1,10 @@
 import decrypt from "./decrypt"
 import encrypt from "./encrypt"
 import generateKeyPair from "./generateKeyPair"
-import { readKey } from "./keyfileUtils"
+import { readKey, writeKey } from "./keyfileUtils"
 
-const { e, d, n } = generateKeyPair()
+const rsaKey = generateKeyPair()
+writeKey("mykey", rsaKey)
 const key = readKey("test_rsa")
 console.log(`n: ${key.n.toString(16)}`)
 console.log(`e: ${key.e.toString(16)}`)
@@ -15,8 +16,8 @@ const plaintext = "This is plaintext, but it's definitely more than 60 bytes. Yu
 console.log(`Plaintext: ${plaintext}`)
 const message = Buffer.from(plaintext)
 console.log(`Message: ${message.toString("hex")}`)
-const encrypted = encrypt(message, e, n)
+const encrypted = encrypt(message, rsaKey.e, rsaKey.n)
 console.log(`Encrypted: ${encrypted.toString("hex")}`)
-const decrypted = decrypt(encrypted, d, n)
+const decrypted = decrypt(encrypted, rsaKey.d, rsaKey.n)
 console.log(`Decrypted: ${decrypted.toString("hex")}`)
 console.log(`Recovered: ${decrypted.toString("ascii")}`)

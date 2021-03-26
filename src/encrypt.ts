@@ -1,5 +1,5 @@
 import { bigIntToBuffer, bufferToBigInt } from "./bufferNumberUtils"
-import modularPower from "./modularPower"
+import { modularPower } from "./modularUtils"
 import { padMessage } from "./padding"
 
 export default function encrypt(message: Buffer, e: bigint, n: bigint): Buffer {

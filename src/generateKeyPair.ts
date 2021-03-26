@@ -1,12 +1,7 @@
-import modularPower from "./modularPower"
+import { RSAKey } from "./keyfileUtils"
+import { modularInverse, modularPower } from "./modularUtils"
 
-interface KeyPair {
-	e: bigint
-	d: bigint
-	n: bigint
-}
-
-export default function generateKeyPair(log: boolean = false): KeyPair {
+export default function generateKeyPair(log: boolean = false): RSAKey {
 	const p = randomPrime(288)
 	const q = randomPrime(224)
 	const n = p * q
@@ -22,7 +17,7 @@ export default function generateKeyPair(log: boolean = false): KeyPair {
 		console.log(`d: ${d.toString(16)}`)
 	}
 
-	return { e, d, n }
+	return { e, d, n, p, q }
 }
 
 function randomPrime(bits: number): bigint {
@@ -41,26 +36,6 @@ function lcm(a: bigint, b: bigint): bigint {
 	}
 
 	return product / gcd(a, b)
-}
-
-function modularInverse(num: bigint, modulus: bigint): bigint {
-	let [t, newT] = [0n, 1n]
-	let [r, newR] = [modulus, num]
-
-	while (newR !== 0n) {
-		const q = r / newR
-		;[t, newT] = [newT, t - q * newT]
-		;[r, newR] = [newR, r - q * newR]
-	}
-
-	if (r > 1) {
-		throw new Error(`${num} is not invertible.`)
-	}
-	if (t < 0) {
-		t += modulus
-	}
-
-	return t
 }
 
 function gcd(a: bigint, b: bigint): bigint {
